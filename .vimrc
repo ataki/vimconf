@@ -49,6 +49,14 @@ set nocompatible
     " Fuzzy finder (files, mru, etc)
     Plugin 'kien/ctrlp.vim'
 
+    " Clojure Plugins
+    Plugin 'guns/vim-clojure-static'
+    Plugin 'kien/rainbow_parentheses.vim'
+    Plugin 'vim-scripts/paredit.vim'
+    
+    " Coffeescript
+    Plugin 'kchmck/vim-coffee-script'
+
     " A pretty statusline, bufferline integration
     Plugin 'itchyny/lightline.vim'
     Plugin 'bling/vim-bufferline'
@@ -58,6 +66,7 @@ set nocompatible
 
     " Glorious colorscheme
     Plugin 'nanotech/jellybeans.vim'
+    Plugin 'altercation/vim-colors-solarized'
 
     " Super easy commenting, toggle comments etc
     Plugin 'scrooloose/nerdcommenter'
@@ -157,6 +166,7 @@ set nocompatible
         set vb t_vb=                                " disable beep and flashing
         set wildignore=*.a,*.o,*.so,*.pyc,*.jpg,
                     \*.jpeg,*.png,*.gif,*.pdf,*.git,
+                    \venv,                          " python development
                     \*.swp,*.swo                    " tab completion ignores
         set wildmenu                                " better auto complete
         set wildmode=longest,list                   " bash-like auto complete
@@ -166,7 +176,7 @@ set nocompatible
             " set fileencoding=utf-8                " default none
         """ }}}
         """ Gvim {{{
-            set guifont=DejaVu\ Sans\ Mono\ 9
+            set guifont=monaco\ 12
             set guioptions-=m                       " remove menubar
             set guioptions-=T                       " remove toolbar
             set guioptions-=r                       " remove right scrollbar
@@ -181,7 +191,7 @@ set nocompatible
     set linebreak                                   " don't cut words on wrap
     set listchars=tab:>\                            " > to highlight <tab>
     set list                                        " displaying listchars
-    set mouse=                                      " disable mouse
+    set mouse=a                                     " enable mouse
     set noshowmode                                  " hide mode cmd line
     set noexrc                                      " don't use other .*rc(s)
     set nostartofline                               " keep cursor column pos
@@ -196,7 +206,7 @@ set nocompatible
         set foldcolumn=0                            " hide folding column
         set foldmethod=indent                       " folds using indent
         set foldnestmax=10                          " max 10 nested folds
-        set foldlevelstart=99                       " folds open by default
+        set foldlevelstart=99                       " folds closed by default
     """ }}}
     """ Search and replace {{{
         set gdefault                                " default s//g (global)
@@ -282,7 +292,10 @@ set nocompatible
         noremap <leader>vs :source $HOME/.vimrc<CR>
 
         " Yank(copy) to system clipboard
-        noremap <leader>y "+y
+        " noremap <leader>y "+y
+
+        " Paste from system clipboard
+        " noremap <leader>p "+p
 
         " Toggle folding
         nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
@@ -607,9 +620,9 @@ set nocompatible
     let g:syntastic_cpp_check_header = 1
     let g:syntastic_cpp_compiler_options = ' -std=c++0x'
     let g:syntastic_mode_map = {
-        \ 'mode': 'passive',
+        \ 'mode': 'active',
         \ 'active_filetypes':
-            \ ['c', 'cpp', 'perl', 'python'] }
+            \ ['c', 'cpp', 'perl', 'python', 'js'] }
 
     " Netrw - the bundled (network) file and directory browser
     let g:netrw_banner = 0
@@ -628,3 +641,22 @@ set nocompatible
         source $HOME/.vimrc.last
     endif
 """ }}}
+
+" For Mac OSX, Copy/Paste into CmdLine Vim
+set clipboard=unnamed
+map <F2> :w !pbcopy<CR><CR>
+map <F3> :r !pbpaste<CR>
+
+" Set specific indentation for files
+autocmd Filetype html setlocal ts=2 sts=2 sw=2
+autocmd Filetype ruby setlocal ts=2 sts=2 sw=2
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
+autocmd Filetype coffee setlocal ts=2 sts=2 sw=2
+autocmd Filetype python setlocal ts=4 sts=4 sw=4
+
+" Rainbow parentheses on by default
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
